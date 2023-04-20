@@ -1,12 +1,14 @@
-package com.cursodsousa.libraryapi.api.service;
+package com.cursodsousa.libraryapi.service;
 
-import com.cursodsousa.libraryapi.api.model.entity.Book;
+
+import com.cursodsousa.libraryapi.model.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 public interface BookService {
+
     Book save(Book any);
 
     Optional<Book> getById(Long id);
@@ -15,7 +17,7 @@ public interface BookService {
 
     Book update(Book book);
 
-    Page<Book> find(Book filter, Pageable pageRequest);
+    Page<Book> find(Book filter, Pageable pageRequest );
 
     Optional<Book> getBookByIsbn(String isbn);
 }

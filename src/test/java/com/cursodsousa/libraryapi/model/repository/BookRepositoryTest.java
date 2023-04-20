@@ -1,8 +1,6 @@
 package com.cursodsousa.libraryapi.model.repository;
 
-import com.cursodsousa.libraryapi.api.model.entity.Book;
-import com.cursodsousa.libraryapi.api.model.repository.BookRepository;
-import org.assertj.core.api.Assertions;
+import com.cursodsousa.libraryapi.model.entity.Book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +40,7 @@ public class BookRepositoryTest {
         assertThat(exists).isTrue();
     }
 
-    private static Book createNewBook(String isbn) {
+    public static Book createNewBook(String isbn) {
         return Book.builder().title("Aventuras").author("Fulano").isbn(isbn).build();
     }
 
