@@ -14,7 +14,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>library-api</name>
     <description>Projeto de controle de aluguel de livros</description>
-
+    <packaging>jar</packaging> <!-- jar=standalone  war=usando tomcat -->
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -29,6 +29,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!--necessário para usar o tomcat -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        -->
 
        <dependency>
            <groupId>org.springframework.boot</groupId>
@@ -71,6 +80,24 @@
            <version>2.3.0</version>
        </dependency>
 
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        -->
+
       <dependency>
           <groupId>io.springfox</groupId>
           <artifactId>springfox-swagger2</artifactId>
@@ -102,6 +129,41 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <!--version>0.8.2</version-->
+                <configuration>
+                    <excludes>
+                        <!--
+                        <exclude>com/cursodsousa/libraryapi/model/entity/Book.class</exclude>
+                        <exclude>com/cursodsousa/libraryapi/model/entity/Loan.class</exclude>
+                        <exclude>com/cursodsousa/libraryapi/api/dto/BookDTO.class</exclude>
+                        <exclude>com/cursodsousa/libraryapi/api/dto/LoanDTO.class</exclude>
+                        <exclude>com/cursodsousa/libraryapi/api/dto/LoanFilterDTO.class</exclude>
+                        <exclude>com/cursodsousa/libraryapi/api/dto/ReturnedLoanDTO.class</exclude>
+                        -->
+                        <exclude>**/entity/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
