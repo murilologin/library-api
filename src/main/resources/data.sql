@@ -1,0 +1,1 @@
+insert into user(id, username, password, email) values(1, 'admin', '123', 'murilo.login@gmail.com');
