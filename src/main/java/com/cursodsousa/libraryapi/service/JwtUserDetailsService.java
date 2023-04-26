@@ -1,5 +1,6 @@
 package com.cursodsousa.libraryapi.service;
 
+import com.cursodsousa.libraryapi.model.entity.Usuario;
 import com.cursodsousa.libraryapi.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -22,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		var usuario = repository.findByEmail(username);
+		Optional< Usuario> usuario = repository.findByEmail(username);
 
 		if (usuario.isPresent()) {
 			String senha = bCryptPasswordEncoder.encode(usuario.get().getPassword());
