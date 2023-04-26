@@ -31,6 +31,6 @@ public class Usuario extends AbstractAggregateRoot<Usuario> {
     @Column
     private String name;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 }

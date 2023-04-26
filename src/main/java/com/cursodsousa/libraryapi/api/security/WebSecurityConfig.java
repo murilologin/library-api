@@ -51,27 +51,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		// We don't need CSRF for this example
 		httpSecurity.csrf().disable()
-				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/auth").permitAll().
-				// all other requests need to be authenticated
-						anyRequest().authenticated().and().
-				// make sure we use stateless session; session won't be used to
-				// store user's state.
-						exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+				// não autentique esta solicitação em particular
+				.authorizeRequests()
+				.antMatchers("/auth").permitAll()
+				// todas as outras solicitações precisam ser autenticadas
+				.anyRequest().authenticated().and()
+				// certifique-se de usar sessão sem estado; sessão não será usada para
+				// armazenar o estado do usuário.
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+				.and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		// Add a filter to validate the tokens with every request
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
+
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/v3/api-docs/**",
-				"/configuration/ui",
-				"/swagger-resources/**",
-				"/configuration/security",
+				"/swagger-ui/**",
 				"/swagger-ui.html",
-				"/webjars/**",
-				"/swagger-ui/**");
+				"/swagger-resources/**");
 	}
+
+
 }

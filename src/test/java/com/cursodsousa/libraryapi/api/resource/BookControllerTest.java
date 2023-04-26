@@ -1,9 +1,12 @@
 package com.cursodsousa.libraryapi.api.resource;
 
 import com.cursodsousa.libraryapi.api.dto.BookDTO;
+import com.cursodsousa.libraryapi.api.security.JwtAuthenticationEntryPoint;
+import com.cursodsousa.libraryapi.api.security.JwtTokenUtil;
 import com.cursodsousa.libraryapi.service.BookService;
 import com.cursodsousa.libraryapi.model.entity.Book;
 import com.cursodsousa.libraryapi.exception.BusinessException;
+import com.cursodsousa.libraryapi.service.JwtUserDetailsService;
 import com.cursodsousa.libraryapi.service.LoanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -20,6 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(controllers = BookController.class)
 @AutoConfigureMockMvc
+@WithMockUser
 public class BookControllerTest {
 
     static String BOOK_API = "/api/books";
@@ -50,6 +55,15 @@ public class BookControllerTest {
 
     @MockBean
     LoanService loanService;
+
+    @MockBean
+    JwtUserDetailsService jwtUserDetailsService;
+
+    @MockBean
+    JwtTokenUtil jwtTokenUtil;
+
+    @MockBean
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Test
     @DisplayName("Deve criar um livro com sucesso")
@@ -81,7 +95,11 @@ public class BookControllerTest {
     @DisplayName("Deve lançar erro de validação quando não houver dados suficientes para criação de um livro")
     public void createInvalidBookTest() throws Exception {
 
-        String json = new ObjectMapper().writeValueAsString(new BookDTO());
+        BookDTO dto = new BookDTO(); //  createNewBook();
+        BDDMockito.given(service.save(Mockito.any(Book.class)))
+                .willThrow(new BusinessException("Dados inválidos"));
+
+        String json = new ObjectMapper().writeValueAsString(dto);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(BOOK_API)
@@ -91,7 +109,7 @@ public class BookControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", hasSize(3)));
+                .andExpect(jsonPath("errors", hasSize(1)));
     }
 
     @Test

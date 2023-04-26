@@ -3,10 +3,13 @@ package com.cursodsousa.libraryapi.api.resource;
 import com.cursodsousa.libraryapi.api.dto.LoanDTO;
 import com.cursodsousa.libraryapi.api.dto.LoanFilterDTO;
 import com.cursodsousa.libraryapi.api.dto.ReturnedLoanDTO;
+import com.cursodsousa.libraryapi.api.security.JwtAuthenticationEntryPoint;
+import com.cursodsousa.libraryapi.api.security.JwtTokenUtil;
 import com.cursodsousa.libraryapi.model.entity.Book;
 import com.cursodsousa.libraryapi.model.entity.Loan;
 import com.cursodsousa.libraryapi.service.BookService;
 import com.cursodsousa.libraryapi.exception.BusinessException;
+import com.cursodsousa.libraryapi.service.JwtUserDetailsService;
 import com.cursodsousa.libraryapi.service.LoanService;
 import com.cursodsousa.libraryapi.service.LoanServiceTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(controllers = LoanController.class)
 @AutoConfigureMockMvc
+@WithMockUser
 public class LoanControllerTest {
 
     static final String LOAN_API = "/api/loans";
@@ -51,6 +56,16 @@ public class LoanControllerTest {
     private BookService bookService;
     @MockBean
     private LoanService loanService;
+
+    @MockBean
+    JwtUserDetailsService jwtUserDetailsService;
+
+    @MockBean
+    JwtTokenUtil jwtTokenUtil;
+
+    @MockBean
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Test
     @DisplayName("Deve realizar um emprestimo")

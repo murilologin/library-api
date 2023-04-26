@@ -40,7 +40,7 @@ public class JwtAuthenticationController {
 		try {
 			authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário ou senha inválido");
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválido");
 		}
 
 		final UserDetails userDetails = jwtInMemoryUserDetailsService
